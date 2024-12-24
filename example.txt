@@ -1,0 +1,20 @@
+conda env create -f environment.yml
+conda activate opera
+python -m pip install -e transformers-4.29.2
+
+可能还需要用nltk装一些东西  参考 test.py 报错了就装
+
+# baseline
+python chair_eval_baseline.py --model instructblip --gpu-id 1 --beam 5 --scale_factor 50 --threshold 15 --num_attn_candidates 5 --penalty_weights 1
+
+# opera
+python chair_eval.py --model instructblip --gpu-id 1 --beam 5 --scale_factor 50 --threshold 15 --num_attn_candidates 5 --penalty_weights 1
+
+# img_relevance_decoding
+python chair_eval_ir.py --model instructblip --gpu-id 0 --beam 5 --scale_factor 50 --threshold 15 --num_attn_candidates 5 --penalty_weights 1 --img_relevance_penalty 1
+
+# 评估
+python chair.py --cap_file log/instructblip/ours-s_50.0-t_15-num_can_5-p_1.0.jsonl --save_path log/instructblip_result/ours-s_50.0-t_15-num_can_5-p_1.0.jsonl
+
+
+python chair.py --cap_file log/instructblip/img_relevance_opposite_decoding-s_50.0-t_15-num_can_5-p_1.0_ip_100.0_ioTrue.jsonl --save_path log/instructblip_result/img_relevance_opposite_decoding-s_50.0-t_15-num_can_5-p_1.0_ip_100.0_ioTrue.jsonl
